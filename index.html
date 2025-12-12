@@ -61,17 +61,17 @@
             scrollbar-width: none;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                Helvetica, Arial, sans-serif;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            overflow-x: hidden;
-            transition:
-                background-color 0.3s ease,
-                color 0.3s ease;
-        }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
         #canvas-container {
             position: fixed;
             inset: 0;
@@ -79,18 +79,18 @@
             outline: none;
         }
 
-        main {
-            position: relative;
-            z-index: 10;
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            pointer-events: none;
-        }
+main {
+    position: relative;
+    z-index: 10;
+    flex: 1;                 /* fills remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    pointer-events: none;
+}
 
         main .logo {
             margin-bottom: 2rem;
@@ -147,14 +147,16 @@
             background: var(--btn-bg-hover);
         }
 
-        footer {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 1rem 0 1.5rem;
-            font-size: 0.8rem;
-            color: var(--footer-color);
-        }
+
+footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 1rem 0 1.5rem;
+    font-size: 0.8rem;
+    color: var(--footer-color);
+    margin-top: auto;        /* pushes footer to bottom */
+}
 
         #copyright-year {
             margin-bottom: 5px;
@@ -180,36 +182,37 @@
             }
         }
 
-        .modal {
-            position: fixed;
-            z-index: 100;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            padding: 20px 0;
-        }
+.modal {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
 
-        .modal-content {
-            max-height: 90vh;
-            overflow: hidden; /* body scrolls, not header */
-            background-color: var(--modal-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            margin: 2.5vh auto;
-            padding: 24px 40px 32px;
-            border: 1px solid var(--border-color);
-            width: 90%;
-            max-width: 700px;
-            border-radius: 8px;
-            color: var(--text-color);
-            line-height: 1.6;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-        }
+    display: none;          /* kept for closed state */
+    place-items: center;    /* centers the modal-content */
+    padding: 20px;          /* safe spacing on small screens */
+}
+
+.modal-content {
+    height: auto;
+    max-height: calc(100vh - 40px); /* stays within viewport */
+    overflow: hidden;
+    background-color: var(--modal-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 700px;
+    border-radius: 8px;
+    color: var(--text-color);
+    line-height: 1.6;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
 
         .modal-header {
             display: flex;
