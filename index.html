@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A&B Financial</title>
+
+    <!-- Hard-coded Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --subtitle-color: rgba(0, 0, 0, 0.7);
+            --footer-color: rgba(0, 0, 0, 0.5);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --btn-border: rgba(0, 0, 0, 0.2);
+            --btn-bg: rgba(0, 0, 0, 0.03);
+            --btn-bg-hover: rgba(0, 0, 0, 0.06);
+            --modal-bg: rgba(240, 240, 240, 0.9);
+            --modal-content-text: rgba(0, 0, 0, 0.7);
+            --link-color: #000000;
+        }
+
+        body.dark-theme {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --subtitle-color: rgba(255, 255, 255, 0.7);
+            --footer-color: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --btn-border: rgba(255, 255, 255, 0.3);
+            --btn-bg: rgba(255, 255, 255, 0.06);
+            --btn-bg-hover: rgba(255, 255, 255, 0.12);
+            --modal-bg: rgba(26, 26, 26, 0.9);
+            --modal-content-text: rgba(255, 255, 255, 0.75);
+            --link-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Hide scrollbars but allow scroll */
+        body::-webkit-scrollbar,
+        *::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            transition:
+                background-color 0.3s ease,
+                color 0.3s ease;
+        }
+
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            outline: none;
+        }
+
+        main {
+            position: relative;
+            z-index: 10;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        main .logo {
+            margin-bottom: 2rem;
+            pointer-events: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        main .logo svg {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            color: var(--text-color);
+        }
+
+        p.subtitle {
+            font-size: 1.15rem;
+            color: var(--subtitle-color);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            pointer-events: auto;
+        }
+
+        .cta-container {
+            pointer-events: auto;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition:
+                transform 0.2s,
+                opacity 0.2s,
+                background 0.2s,
+                border-color 0.2s;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            border: 1px solid var(--btn-border);
+            color: var(--text-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: var(--btn-bg);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+            background: var(--btn-bg-hover);
+        }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 1rem 0 1.5rem;
+            font-size: 0.8rem;
+            color: var(--footer-color);
+        }
+
+        #copyright-year {
+            margin-bottom: 5px;
+        }
+
+        .legal-links a {
+            color: var(--footer-color);
+            text-decoration: none;
+            margin: 0 0.5rem;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .legal-links a:hover {
+            color: var(--text-color);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            main .logo svg {
+                max-width: 80vw;
+            }
+        }
+
+        .modal {
+            position: fixed;
+            z-index: 100;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            padding: 20px 0;
+        }
+
+        .modal-content {
+            max-height: 90vh;
+            overflow: hidden; /* body scrolls, not header */
+            background-color: var(--modal-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin: 2.5vh auto;
+            padding: 24px 40px 32px;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 700px;
+            border-radius: 8px;
+            color: var(--text-color);
+            line-height: 1.6;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1;
+        }
+
+        .modal-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+        }
+
+        .modal-body h2 {
+            color: var(--text-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .modal-body p,
+        .modal-body ul,
+        .modal-body ol {
+            color: var(--modal-content-text);
+            margin-bottom: 1rem;
+        }
+
+        .modal-body a {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+
+        .close-btn {
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-color);
+            line-height: 1;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--footer-color);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            pointer-events: auto;
+        }
+
+        .theme-toggle-btn {
+            border: 1px solid rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 999px;
+            padding: 0.5rem 0.9rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #000000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <!-- Theme toggle (no icons, label toggles between Dark / Light) -->
+    <div class="theme-toggle">
+        <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle light and dark mode">
+            <span id="themeToggleLabel">Dark</span>
+        </button>
+    </div>
+
+    <main>
+        <div class="logo">
+            <svg viewBox="0 0 861 285" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_d_2_159)">
+                    <path
+                        d="M149.53 11C152.886 11 155.327 11.9951 156.853 13.9854L187.2 51.25V271.325C187.2 274.642 188.867 276.301 192.2 276.301H124.131C120.317 276.301 118.41 274.642 118.41 271.325V196.69H99.1895V271.325C99.1893 274.642 97.2823 276.301 93.4688 276.301H9.7207C5.90717 276.301 4.00015 274.642 4 271.325V86.8281C4.0001 84.7053 4.76272 82.7149 6.28809 80.8574L60.29 13.9854C61.9681 11.9951 64.4088 11 67.6123 11H149.53ZM319.2 11C322.267 11 324.934 12.0617 327.2 14.1846L367.2 53.9893C369.333 56.2448 370.4 58.8986 370.4 61.9502V103.746C370.4 105.073 370.133 106.134 369.6 106.93C369.066 107.726 368.267 108.655 367.2 109.717L335.8 137.58L332.4 142.954L335.8 150.317L367.2 178.181C368.267 179.242 369.066 180.172 369.6 180.968C370.133 181.631 370.4 182.692 370.4 184.151V225.151C370.4 228.336 369.333 230.989 367.2 233.112L327.2 272.917C324.934 275.173 322.267 276.301 319.2 276.301H207.88C211.693 276.301 213.599 274.642 213.6 271.325V86.8281C213.6 84.7053 212.837 82.7149 211.312 80.8574L187.2 51.25V15.9756C187.2 12.6585 188.867 11 192.2 11H319.2ZM278.8 173.803C273.467 173.803 269.066 175.528 265.6 178.978C262.133 182.295 260.4 186.673 260.4 192.113C260.4 197.42 262.133 201.798 265.6 205.248C269.066 208.565 273.467 210.224 278.8 210.224C284.133 210.224 288.533 208.565 292 205.248C295.466 201.798 297.2 197.42 297.2 192.113C297.2 186.673 295.467 182.295 292 178.978C288.533 175.528 284.133 173.803 278.8 173.803ZM108.8 89.2168C102.24 89.2168 96.901 91.0084 92.7822 94.5908C88.6637 98.1732 86.6045 102.817 86.6045 108.522C86.6045 114.095 88.6637 118.672 92.7822 122.255C96.901 125.837 102.24 127.629 108.8 127.629C115.359 127.629 120.699 125.837 124.817 122.255C128.936 118.672 130.996 114.095 130.996 108.522C130.996 102.817 128.936 98.1733 124.817 94.5908C120.699 91.0084 115.359 89.2168 108.8 89.2168ZM277.8 77.8721C272.867 77.8721 268.734 79.5309 265.4 82.8477C262.067 86.032 260.4 90.1456 260.4 95.1875C260.4 100.097 262.067 104.21 265.4 107.527C268.734 110.844 272.867 112.503 277.8 112.503C282.866 112.503 287 110.844 290.2 107.527C293.534 104.21 295.2 100.097 295.2 95.1875C295.2 90.1456 293.533 86.032 290.2 82.8477C287 79.5307 282.866 77.8721 277.8 77.8721Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M733.931 264.931H807.23L671.548 30.3297V276.301H660.178V11.0007H673.443L815.189 256.214V11.0007H826.559V276.301H733.931V264.931Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M813.041 276.3L671.976 30.329V276.3H660.606V11H673.871L815.617 256.213V11H826.987V276.3H813.041Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M608.478 276.3H597.108V11H608.478V276.3Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M547.533 137.586H434.97L550.944 22.37H422.842V276.3H411.472V11H578.611L462.637 126.216H547.533V137.586Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M793.016 44.6658L784.531 36.1805L820.711 0L829.197 8.48528L793.016 44.6658Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M848.406 44.6658L856.892 36.1805L820.711 0L812.226 8.48528L848.406 44.6658Z"
+                        fill="currentColor"
+                    />
+                </g>
+                <defs>
+                    <filter
+                        id="filter0_d_2_159"
+                        x="0"
+                        y="0"
+                        width="860.892"
+                        height="284.301"
+                        filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB"
+                    >
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix
+                            in="SourceAlpha"
+                            type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                            result="hardAlpha"
+                        />
+                        <feOffset dy="4" />
+                        <feGaussianBlur stdDeviation="2" />
+                        <feComposite in2="hardAlpha" operator="out" />
+                        <feColorMatrix
+                            type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                        />
+                        <feBlend
+                            mode="normal"
+                            in2="BackgroundImageFix"
+                            result="effect1_dropShadow_2_159"
+                        />
+                        <feBlend
+                            mode="normal"
+                            in="SourceGraphic"
+                            in2="effect1_dropShadow_2_159"
+                            result="shape"
+                        />
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+        <p class="subtitle">
+            Venture capital and advisory firm that partners with founders to build beautiful software
+            while preserving their long-term equity.
+        </p>
+        <div class="cta-container">
+            <a href="mailto:anthony@abfin.co" class="btn btn-secondary">Partner with us</a>
+        </div>
+    </main>
+
+    <footer>
+        <p id="copyright-year"></p>
+        <div class="legal-links">
+            <a onclick="openModal('privacyModal')">Privacy Policy</a> |
+            <a onclick="openModal('termsModal')">Terms of Service</a>
+        </div>
+    </footer>
+
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>Privacy Policy</h1>
+                <span class="close-btn" onclick="closeModal('privacyModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date: December 12, 2025</strong></p>
+                <p>
+                    This Privacy Policy describes how A&B Financial, LLC ("A&B Financial," "we," "us," or
+                    "our") collects, uses, and discloses information when you visit our website (the
+                    "Site"). By using the Site, you agree to the collection and use of information in
+                    accordance with this policy.
+                </p>
+
+                <h2>1. Information We Collect</h2>
+                <p>We collect information in two ways:</p>
+                <ul>
+                    <li>
+                        <strong>Personal Information You Provide:</strong> When you contact us via the
+                        email link, you provide your email address and any personal details included in
+                        your message. This information is used solely to respond to your inquiries.
+                    </li>
+                    <li>
+                        <strong>Non-Personal Information (Usage Data):</strong> We automatically collect
+                        information about your access and use of the Site ("Usage Data"). This may
+                        include your computer's IP address, browser type, the pages of our Site that you
+                        visit, the time and date of your visit, and other diagnostic data. This data is
+                        primarily used for security, site maintenance, and analytics.
+                    </li>
+                </ul>
+
+                <h2>2. Use of Data</h2>
+                <p>A&B Financial uses the collected data for various purposes:</p>
+                <ul>
+                    <li>To provide and maintain our Site and ensure security.</li>
+                    <li>To respond to your specific inquiries or requests.</li>
+                    <li>To monitor the usage of the Site and improve the user experience.</li>
+                    <li>To detect, prevent and address technical issues.</li>
+                </ul>
+
+                <h2>3. Disclosure of Data</h2>
+                <p>
+                    We may disclose your Personal Data in the good faith belief that such action is
+                    necessary to:
+                </p>
+                <ul>
+                    <li>Comply with a legal obligation (e.g., court order).</li>
+                    <li>Protect and defend the rights or property of A&B Financial.</li>
+                    <li>Prevent or investigate possible wrongdoing in connection with the Site.</li>
+                    <li>Protect the personal safety of users of the Site or the public.</li>
+                </ul>
+
+                <h2>4. Security of Data</h2>
+                <p>
+                    The security of your data is important to us, but remember that no method of
+                    transmission over the Internet or method of electronic storage is 100% secure. While
+                    we strive to use commercially acceptable means to protect your Personal Data, we
+                    cannot guarantee its absolute security.
+                </p>
+
+                <h2>5. Changes to This Privacy Policy</h2>
+                <p>
+                    We may update our Privacy Policy from time to time. We will notify you of any changes
+                    by posting the new Privacy Policy on this page. You are advised to review this
+                    Privacy Policy periodically for any changes.
+                </p>
+
+                <h2>6. Contact Us</h2>
+                <p>
+                    If you have any questions about this Privacy Policy, please contact us by email:
+                    <a href="mailto:info@abfin.co">info@abfin.co</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>Terms of Service</h1>
+                <span class="close-btn" onclick="closeModal('termsModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date: December 12, 2025</strong></p>
+
+                <p>
+                    Welcome to A&B Financial, LLC ("A&B Financial," "we," "us," or "our"). These Terms of
+                    Service ("Terms") govern your use of our website (the "Site"). By accessing or using
+                    the Site, you agree to be bound by these Terms.
+                </p>
+
+                <h2>1. Intellectual Property</h2>
+                <p>
+                    The Site and its original content, features, and functionality are and will remain
+                    the exclusive property of A&B Financial, LLC. This includes all logos, text,
+                    graphics, and code. You may not copy, reproduce, or distribute any content from the
+                    Site without our express written permission.
+                </p>
+
+                <h2>2. Disclaimer and Limitation of Liability</h2>
+                <p>
+                    The information provided on the Site is for general informational purposes only and
+                    does not constitute financial, investment, legal, or professional advice. We make no
+                    warranties, expressed or implied, regarding the accuracy or completeness of the
+                    content. Your use of the Site is at your sole risk.
+                </p>
+                <p>
+                    In no event shall A&B Financial, nor its directors, employees, partners, agents,
+                    suppliers, or affiliates, be liable for any indirect, incidental, special,
+                    consequential or punitive damages, including without limitation, loss of profits,
+                    data, use, goodwill, or other intangible losses, resulting from:
+                </p>
+                <ol>
+                    <li>Your access to or use of or inability to access or use the Site;</li>
+                    <li>Any conduct or content of any third party on the Site;</li>
+                    <li>Any content obtained from the Site.</li>
+                </ol>
+
+                <h2>3. Governing Law</h2>
+                <p>
+                    These Terms shall be governed and construed in accordance with the laws of the State
+                    of <strong>Texas</strong>, without regard to its conflict of law provisions. You
+                    agree to submit to the personal jurisdiction of the courts located within
+                    <strong>Texas</strong> for the purpose of litigating all such claims or disputes.
+                </p>
+
+                <h2>4. Changes to Terms</h2>
+                <p>
+                    We reserve the right, at our sole discretion, to modify or replace these Terms at any
+                    time. By continuing to access or use our Site after those revisions become effective,
+                    you agree to be bound by the revised terms.
+                </p>
+
+                <h2>5. Contact Us</h2>
+                <p>
+                    If you have any questions about these Terms, please contact us by email:
+                    <a href="mailto:info@abfin.co">info@abfin.co</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Modals
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function (event) {
+            const privacyModal = document.getElementById('privacyModal');
+            const termsModal = document.getElementById('termsModal');
+
+            if (event.target === privacyModal) {
+                closeModal('privacyModal');
+            }
+            if (event.target === termsModal) {
+                closeModal('termsModal');
+            }
+        };
+
+        // THREE.js grid background
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f5f5);
+        scene.fog = new THREE.FogExp2(0xf5f5f5, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        camera.position.z = 20;
+        camera.position.y = 5;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        const geometry = new THREE.PlaneGeometry(100, 100, 64, 64);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x111111,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.35
+        });
+
+        const plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+        plane.rotation.x = -Math.PI / 2;
+
+        const count = geometry.attributes.position.count;
+        const originalPositions = new Float32Array(count * 3);
+        for (let i = 0; i < count * 3; i++) {
+            originalPositions[i] = geometry.attributes.position.array[i];
+        }
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX - windowHalfX;
+            mouseY = event.clientY - windowHalfY;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            const positions = geometry.attributes.position.array;
+
+            for (let i = 0; i < count; i++) {
+                const x = originalPositions[i * 3];
+                const y = originalPositions[i * 3 + 1];
+
+                const waveX = 0.5 * Math.sin(x * 0.2 + elapsedTime);
+                const waveY = 0.5 * Math.cos(y * 0.2 + elapsedTime);
+
+                positions[i * 3 + 2] = originalPositions[i * 3 + 2] + waveX + waveY;
+            }
+            geometry.attributes.position.needsUpdate = true;
+
+            targetX = mouseX * 0.001;
+            targetY = mouseY * 0.001;
+
+            plane.rotation.x = -Math.PI / 2 - targetY * 0.2;
+            plane.rotation.z = targetX * 0.2;
+
+            plane.position.x += (mouseX * 0.01 - plane.position.x) * 0.05;
+            plane.position.y += (-mouseY * 0.01 - plane.position.y) * 0.05;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Footer year
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentYear = new Date().getFullYear();
+            document.getElementById('copyright-year').textContent =
+                '© ' + currentYear + ' A&B Financial, LLC.';
+        });
+
+        // THEME TOGGLE
+        // Default is light mode
+        let isDark = false;
+
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeToggleLabel = document.getElementById('themeToggleLabel');
+
+        function applyTheme() {
+            if (isDark) {
+                // Dark mode ON
+                document.body.classList.add('dark-theme');
+                themeToggleLabel.textContent = 'Light'; // clicking goes to light
+
+                // Scene colors for dark
+                scene.background.set(0x050505);
+                scene.fog.color.set(0x050505);
+                material.color.set(0xffffff);
+                material.opacity = 0.35;
+            } else {
+                // Light mode ON
+                document.body.classList.remove('dark-theme');
+                themeToggleLabel.textContent = 'Dark'; // clicking goes to dark
+
+                // Scene colors for light
+                scene.background.set(0xf5f5f5);
+                scene.fog.color.set(0xf5f5f5);
+                material.color.set(0x111111);
+                material.opacity = 0.35;
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            // When user clicks "Dark", go into dark mode and vice versa
+            isDark = !isDark;
+            applyTheme();
+        });
+
+        // Initial theme (light)
+        applyTheme();
+    </script>
+</body>
+</html>
