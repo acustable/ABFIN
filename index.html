@@ -100,12 +100,31 @@
             justify-content: center;
         }
 
-        main .logo svg {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            color: var(--text-color);
-        }
+main .logo img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    display: block;
+}
+@media (max-width: 768px) {
+    main .logo img {
+        max-width: 80vw;
+    }
+}
+
+
+/* Default: light logo shown */
+main .logo .logo-dark {
+    display: none;
+}
+
+/* When dark theme is active: swap logos */
+body.dark-theme main .logo .logo-light {
+    display: none;
+}
+body.dark-theme main .logo .logo-dark {
+    display: block;
+}
 
         p.subtitle {
             font-size: 1rem;
@@ -307,77 +326,11 @@
     </div>
 
     <main>
-        <div class="logo">
-            <svg viewBox="0 0 861 285" xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_d_2_159)">
-                    <path
-                        d="M149.53 11C152.886 11 155.327 11.9951 156.853 13.9854L187.2 51.25V271.325C187.2 274.642 188.867 276.301 192.2 276.301H124.131C120.317 276.301 118.41 274.642 118.41 271.325V196.69H99.1895V271.325C99.1893 274.642 97.2823 276.301 93.4688 276.301H9.7207C5.90717 276.301 4.00015 274.642 4 271.325V86.8281C4.0001 84.7053 4.76272 82.7149 6.28809 80.8574L60.29 13.9854C61.9681 11.9951 64.4088 11 67.6123 11H149.53ZM319.2 11C322.267 11 324.934 12.0617 327.2 14.1846L367.2 53.9893C369.333 56.2448 370.4 58.8986 370.4 61.9502V103.746C370.4 105.073 370.133 106.134 369.6 106.93C369.066 107.726 368.267 108.655 367.2 109.717L335.8 137.58L332.4 142.954L335.8 150.317L367.2 178.181C368.267 179.242 369.066 180.172 369.6 180.968C370.133 181.631 370.4 182.692 370.4 184.151V225.151C370.4 228.336 369.333 230.989 367.2 233.112L327.2 272.917C324.934 275.173 322.267 276.301 319.2 276.301H207.88C211.693 276.301 213.599 274.642 213.6 271.325V86.8281C213.6 84.7053 212.837 82.7149 211.312 80.8574L187.2 51.25V15.9756C187.2 12.6585 188.867 11 192.2 11H319.2ZM278.8 173.803C273.467 173.803 269.066 175.528 265.6 178.978C262.133 182.295 260.4 186.673 260.4 192.113C260.4 197.42 262.133 201.798 265.6 205.248C269.066 208.565 273.467 210.224 278.8 210.224C284.133 210.224 288.533 208.565 292 205.248C295.466 201.798 297.2 197.42 297.2 192.113C297.2 186.673 295.467 182.295 292 178.978C288.533 175.528 284.133 173.803 278.8 173.803ZM108.8 89.2168C102.24 89.2168 96.901 91.0084 92.7822 94.5908C88.6637 98.1732 86.6045 102.817 86.6045 108.522C86.6045 114.095 88.6637 118.672 92.7822 122.255C96.901 125.837 102.24 127.629 108.8 127.629C115.359 127.629 120.699 125.837 124.817 122.255C128.936 118.672 130.996 114.095 130.996 108.522C130.996 102.817 128.936 98.1733 124.817 94.5908C120.699 91.0084 115.359 89.2168 108.8 89.2168ZM277.8 77.8721C272.867 77.8721 268.734 79.5309 265.4 82.8477C262.067 86.032 260.4 90.1456 260.4 95.1875C260.4 100.097 262.067 104.21 265.4 107.527C268.734 110.844 272.867 112.503 277.8 112.503C282.866 112.503 287 110.844 290.2 107.527C293.534 104.21 295.2 100.097 295.2 95.1875C295.2 90.1456 293.533 86.032 290.2 82.8477C287 79.5307 282.866 77.8721 277.8 77.8721Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M733.931 264.931H807.23L671.548 30.3297V276.301H660.178V11.0007H673.443L815.189 256.214V11.0007H826.559V276.301H733.931V264.931Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M813.041 276.3L671.976 30.329V276.3H660.606V11H673.871L815.617 256.213V11H826.987V276.3H813.041Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M608.478 276.3H597.108V11H608.478V276.3Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M547.533 137.586H434.97L550.944 22.37H422.842V276.3H411.472V11H578.611L462.637 126.216H547.533V137.586Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M793.016 44.6658L784.531 36.1805L820.711 0L829.197 8.48528L793.016 44.6658Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M848.406 44.6658L856.892 36.1805L820.711 0L812.226 8.48528L848.406 44.6658Z"
-                        fill="currentColor"
-                    />
-                </g>
-                <defs>
-                    <filter
-                        id="filter0_d_2_159"
-                        x="0"
-                        y="0"
-                        width="860.892"
-                        height="284.301"
-                        filterUnits="userSpaceOnUse"
-                        color-interpolation-filters="sRGB"
-                    >
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                        <feColorMatrix
-                            in="SourceAlpha"
-                            type="matrix"
-                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                            result="hardAlpha"
-                        />
-                        <feOffset dy="4" />
-                        <feGaussianBlur stdDeviation="2" />
-                        <feComposite in2="hardAlpha" operator="out" />
-                        <feColorMatrix
-                            type="matrix"
-                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                        />
-                        <feBlend
-                            mode="normal"
-                            in2="BackgroundImageFix"
-                            result="effect1_dropShadow_2_159"
-                        />
-                        <feBlend
-                            mode="normal"
-                            in="SourceGraphic"
-                            in2="effect1_dropShadow_2_159"
-                            result="shape"
-                        />
-                    </filter>
-                </defs>
-            </svg>
-        </div>
+      <div class="logo">
+    <img class="logo-light" src="https://abfin.co/LogoBlack.svg" alt="A&B Financial logo" />
+    <img class="logo-dark" src="https://abfin.co/LogoWhite.svg" alt="A&B Financial logo" />
+</div>
+
         <p class="subtitle">
             Venture capital and advisory firm that partners with founders to build beautiful software
             while preserving their long-term equity.
